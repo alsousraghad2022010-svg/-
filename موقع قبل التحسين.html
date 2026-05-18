@@ -1,0 +1,1454 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<meta name="theme-color" content="#6B2C91">
+<title>MOSIQATI - Musical Instruments Store</title>
+<link href="https://fonts.googleapis.com/css2?family=Tajawal:wght@300;400;500;700;800;900&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+:root{
+  --primary-purple:#6B2C91;--primary-turquoise:#00B4D8;
+  --gradient-main:linear-gradient(135deg,#6B2C91 0%,#00B4D8 100%);
+  --white:#FFFFFF;--light-bg:#F8F9FA;--dark-text:#2D3436;
+  --shadow:0 10px 30px rgba(107,44,145,0.2);
+  --card-bg:#FFFFFF;--text-color:#2D3436;--border-color:#e0e0e0;
+}
+[data-theme="dark"]{
+  --light-bg:#1a1a2e;--dark-text:#e0e0e0;--card-bg:#16213e;
+  --text-color:#e0e0e0;--border-color:#2a2a4a;
+  --shadow:0 10px 30px rgba(0,0,0,0.4);
+}
+body{
+  font-family:'Tajawal',sans-serif;background:var(--light-bg);color:var(--dark-text);
+  overflow-x:hidden;line-height:1.6;margin:0;padding:0;
+  height:100vh;width:100vw;
+}
+.phone-frame{
+  width:100%;height:100vh;background:var(--light-bg);
+  position:relative;overflow:hidden;
+}
+.phone-screen{
+  width:100%;height:100%;background:var(--light-bg);
+  overflow:hidden;position:relative;display:flex;flex-direction:column;
+}
+.status-bar{
+  display:flex;justify-content:space-between;align-items:center;
+  padding:8px 25px;padding-top:35px;font-size:0.75rem;font-weight:700;
+  color:var(--text-color);background:var(--card-bg);
+}
+.app-content{
+  flex:1;overflow-y:auto;overflow-x:hidden;padding-bottom:80px;scrollbar-width:none;
+}
+.app-content::-webkit-scrollbar{display:none}
+
+/* SPLASH SCREEN */
+.splash-screen{
+  position:absolute;top:0;left:0;width:100%;height:100%;
+  background:var(--gradient-main);display:flex;flex-direction:column;
+  align-items:center;justify-content:center;z-index:9999;
+  transition:opacity 0.8s ease,transform 0.8s ease;
+}
+.splash-screen.hidden{opacity:0;transform:scale(1.1);pointer-events:none}
+.splash-image{
+  width:200px;height:200px;border-radius:30px;
+  box-shadow:0 20px 60px rgba(0,0,0,0.3);
+  animation:splashPulse 2s infinite;
+  margin-bottom:1.5rem;
+  background:white;display:flex;align-items:center;justify-content:center;
+  font-size:100px;
+}
+.splash-title{color:white;font-size:2rem;font-weight:900;text-shadow:0 4px 10px rgba(0,0,0,0.2);margin-bottom:0.5rem}
+.splash-subtitle{color:rgba(255,255,255,0.9);font-size:1rem}
+.splash-loader{width:180px;height:4px;background:rgba(255,255,255,0.3);border-radius:2px;margin-top:2rem;overflow:hidden}
+.splash-loader-bar{height:100%;background:white;border-radius:2px;animation:loadBar 2.5s ease-in-out forwards}
+@keyframes splashPulse{0%,100%{transform:scale(1)}50%{transform:scale(1.05)}}
+@keyframes loadBar{0%{width:0%}100%{width:100%}}
+
+/* AUTH SCREEN */
+.auth-screen{
+  display:none;flex-direction:column;align-items:center;justify-content:center;
+  min-height:100%;padding:2rem;background:var(--light-bg);position:absolute;
+  top:0;left:0;width:100%;z-index:100;
+}
+.auth-screen.active{display:flex}
+.auth-logo{
+  width:140px;height:140px;border-radius:30px;
+  margin-bottom:1.5rem;box-shadow:var(--shadow);
+  background:var(--gradient-main);display:flex;align-items:center;justify-content:center;
+  font-size:80px;
+}
+.auth-title{font-size:1.5rem;font-weight:900;color:var(--primary-purple);margin-bottom:0.5rem}
+.auth-subtitle{color:#999;margin-bottom:2rem;text-align:center}
+.auth-form{width:100%;max-width:300px}
+.auth-input{width:100%;padding:1rem;border:2px solid var(--border-color);border-radius:16px;
+  font-family:'Tajawal',sans-serif;font-size:1rem;background:var(--card-bg);color:var(--text-color);
+  margin-bottom:1rem;transition:all 0.3s ease}
+.auth-input:focus{outline:none;border-color:var(--primary-turquoise);box-shadow:0 0 0 3px rgba(0,180,216,0.1)}
+.auth-btn{width:100%;background:var(--gradient-main);color:white;border:none;padding:1rem;
+  border-radius:16px;font-family:'Tajawal',sans-serif;font-size:1.1rem;font-weight:700;
+  cursor:pointer;transition:all 0.3s ease;margin-bottom:1rem}
+.auth-btn:active{transform:scale(0.98)}
+.auth-link{color:var(--primary-turquoise);text-decoration:none;font-weight:700;cursor:pointer}
+.auth-divider{display:flex;align-items:center;gap:1rem;margin:1.5rem 0;color:#999;font-size:0.9rem}
+.auth-divider::before,.auth-divider::after{content:'';flex:1;height:1px;background:var(--border-color)}
+.social-login{display:flex;gap:1rem;justify-content:center}
+.social-btn{width:50px;height:50px;border-radius:16px;border:2px solid var(--border-color);
+  background:var(--card-bg);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;font-size:1.2rem;transition:all 0.3s ease}
+.social-btn:active{transform:scale(0.95)}
+
+/* HEADER */
+.app-header{display:flex;justify-content:space-between;align-items:center;
+  padding:0.8rem 1rem;background:var(--card-bg);box-shadow:0 2px 10px rgba(0,0,0,0.05)}
+.app-logo{display:flex;align-items:center;gap:0.5rem}
+.app-logo-icon{width:35px;height:35px;background:var(--gradient-main);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;color:white;font-size:1.2rem}
+.app-logo-text{font-weight:900;font-size:1.1rem;background:var(--gradient-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.header-actions{display:flex;gap:0.5rem}
+.icon-btn{width:36px;height:36px;border-radius:10px;border:none;background:var(--light-bg);
+  color:var(--dark-text);display:flex;align-items:center;justify-content:center;
+  cursor:pointer;transition:all 0.3s ease;position:relative}
+.icon-btn:active{transform:scale(0.9)}
+.badge{position:absolute;top:-3px;right:-3px;background:#ff4757;color:white;
+  width:18px;height:18px;border-radius:50%;font-size:0.65rem;display:flex;
+  align-items:center;justify-content:center;font-weight:700}
+
+/* PAGES */
+.page-section{display:none;animation:fadeIn 0.3s ease;padding:1rem}
+.page-section.active{display:block}
+@keyframes fadeIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+
+/* HERO */
+.hero-banner{background:var(--gradient-main);border-radius:24px;padding:1.5rem;
+  color:white;margin-bottom:1.5rem;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.hero-title{font-size:1.4rem;font-weight:900;margin-bottom:0.5rem}
+.hero-subtitle{opacity:0.9;font-size:0.9rem;margin-bottom:1rem}
+.hero-btn{background:white;color:var(--primary-purple);border:none;padding:0.7rem 1.5rem;
+  border-radius:50px;font-family:'Tajawal',sans-serif;font-weight:700;font-size:0.9rem;
+  cursor:pointer;box-shadow:0 5px 15px rgba(0,0,0,0.2)}
+
+/* PRODUCTS */
+.section-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.section-title{font-size:1.1rem;font-weight:800;color:var(--dark-text)}
+.see-all{color:var(--primary-turquoise);text-decoration:none;font-size:0.85rem;font-weight:600}
+.products-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem}
+.product-card{background:var(--card-bg);border-radius:16px;overflow:hidden;
+  box-shadow:var(--shadow);transition:all 0.3s ease;position:relative;cursor:pointer}
+.product-card:active{transform:scale(0.97)}
+.product-image{height:120px;background:linear-gradient(135deg,rgba(107,44,145,0.1) 0%,rgba(0,180,216,0.1) 100%);
+  display:flex;align-items:center;justify-content:center;font-size:2.5rem;position:relative}
+.product-badge{position:absolute;top:8px;right:8px;background:var(--gradient-main);color:white;
+  padding:3px 10px;border-radius:15px;font-size:0.65rem;font-weight:700}
+.product-info{padding:0.8rem}
+.product-title{font-size:0.85rem;font-weight:700;color:var(--text-color);margin-bottom:0.3rem;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.product-price{font-size:1rem;color:var(--primary-turquoise);font-weight:800;margin-bottom:0.3rem}
+.product-rating{color:#ffc107;font-size:0.75rem;margin-bottom:0.5rem}
+.add-btn{width:100%;background:var(--gradient-main);color:white;border:none;padding:0.6rem;
+  border-radius:10px;font-family:'Tajawal',sans-serif;font-weight:700;font-size:0.8rem;
+  cursor:pointer;display:flex;align-items:center;justify-content:center;gap:0.3rem}
+.add-btn:active{transform:scale(0.95)}
+
+/* CART */
+.cart-item{display:flex;align-items:center;background:var(--card-bg);padding:0.8rem;
+  border-radius:14px;margin-bottom:0.8rem;box-shadow:var(--shadow)}
+.cart-item-image{width:50px;height:50px;background:linear-gradient(135deg,rgba(107,44,145,0.1) 0%,rgba(0,180,216,0.1) 100%);
+  border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:1.2rem;margin-left:0.8rem}
+.cart-item-details{flex:1}
+.cart-item-title{font-weight:700;color:var(--text-color);font-size:0.9rem;margin-bottom:0.2rem}
+.cart-item-price{color:var(--primary-turquoise);font-weight:800;font-size:0.9rem}
+.remove-btn{width:32px;height:32px;border-radius:50%;border:none;background:#ff4757;
+  color:white;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:0.8rem}
+.cart-summary{background:var(--gradient-main);color:white;padding:1.2rem;border-radius:16px;
+  text-align:center;margin-top:1.5rem}
+.total-price{font-size:1.5rem;font-weight:800;margin:0.5rem 0}
+
+/* SETTINGS */
+.settings-list{background:var(--card-bg);border-radius:20px;overflow:hidden;box-shadow:var(--shadow)}
+.settings-item{display:flex;align-items:center;justify-content:space-between;
+  padding:0.8rem 1rem;border-bottom:1px solid var(--border-color);cursor:pointer}
+.settings-item:last-child{border-bottom:none}
+.settings-item-left{display:flex;align-items:center;gap:0.8rem}
+.settings-icon{width:36px;height:36px;background:var(--gradient-main);border-radius:10px;
+  display:flex;align-items:center;justify-content:center;color:white;font-size:0.9rem}
+.settings-info h4{color:var(--text-color);font-size:0.9rem;margin-bottom:0.1rem}
+.settings-info p{color:#999;font-size:0.8rem}
+.toggle-switch{width:44px;height:24px;background:#ddd;border-radius:12px;position:relative;
+  cursor:pointer;transition:background 0.3s ease}
+.toggle-switch.active{background:var(--primary-purple)}
+.toggle-switch::after{content:'';position:absolute;width:20px;height:20px;background:white;
+  border-radius:50%;top:2px;right:2px;transition:transform 0.3s ease;box-shadow:0 1px 3px rgba(0,0,0,0.2)}
+.toggle-switch.active::after{transform:translateX(-20px)}
+
+/* MODAL */
+.modal-overlay{position:absolute;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.5);
+  backdrop-filter:blur(5px);z-index:2000;display:none;align-items:flex-end;justify-content:center}
+.modal-overlay.active{display:flex}
+.modal-content{background:var(--card-bg);width:100%;max-height:85vh;
+  border-radius:30px 30px 0 0;overflow-y:auto;animation:slideUp 0.3s ease;padding:1.5rem;position:relative}
+@keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+.modal-close{position:absolute;top:1rem;left:1rem;width:36px;height:36px;
+  background:rgba(0,0,0,0.1);border:none;border-radius:50%;color:var(--dark-text);
+  cursor:pointer;display:flex;align-items:center;justify-content:center;z-index:10}
+
+/* TOAST */
+.toast{position:absolute;bottom:100px;left:50%;transform:translateX(-50%) translateY(100px);
+  background:var(--gradient-main);color:white;padding:0.8rem 1.5rem;border-radius:50px;
+  box-shadow:var(--shadow);z-index:3000;display:flex;align-items:center;gap:0.5rem;
+  font-weight:700;font-size:0.9rem;transition:transform 0.4s ease,opacity 0.4s ease;
+  white-space:nowrap;opacity:0;pointer-events:none}
+.toast.show{transform:translateX(-50%) translateY(0);opacity:1}
+
+/* BOTTOM NAV */
+.bottom-nav{position:absolute;bottom:0;left:0;right:0;background:var(--card-bg);
+  box-shadow:0 -5px 20px rgba(0,0,0,0.1);z-index:1000;display:flex;justify-content:space-around;
+  padding:0.3rem 0;border-radius:20px 20px 0 0}
+.bottom-nav-item{display:flex;flex-direction:column;align-items:center;justify-content:center;
+  padding:0.2rem 0.3rem;color:#999;text-decoration:none;font-size:0.55rem;
+  transition:all 0.3s ease;cursor:pointer;border:none;background:none;font-family:'Tajawal',sans-serif;flex:1}
+.bottom-nav-item i{font-size:1rem;margin-bottom:0.1rem}
+.bottom-nav-item.active{color:var(--primary-purple)}
+.bottom-nav-item.active i{transform:translateY(-2px)}
+
+/* EMPTY STATE */
+.empty-state{text-align:center;padding:2rem 1rem;color:#999}
+.empty-state i{font-size:3rem;margin-bottom:0.8rem;opacity:0.5}
+
+/* CONTACT */
+.contact-card{background:var(--card-bg);border-radius:20px;padding:1rem;box-shadow:var(--shadow);margin-bottom:0.8rem}
+.contact-item{display:flex;align-items:center;gap:0.8rem;padding:0.8rem 0;border-bottom:1px solid var(--border-color)}
+.contact-item:last-child{border-bottom:none}
+.contact-icon{width:40px;height:40px;background:var(--gradient-main);border-radius:12px;
+  display:flex;align-items:center;justify-content:center;color:white;font-size:1rem}
+
+/* FAQ */
+.faq-item{background:var(--card-bg);border-radius:14px;margin-bottom:0.8rem;box-shadow:var(--shadow);overflow:hidden}
+.faq-question{padding:1rem;display:flex;justify-content:space-between;align-items:center;
+  cursor:pointer;font-weight:700;color:var(--text-color);font-size:0.9rem}
+.faq-question i{transition:transform 0.3s ease;color:var(--primary-purple)}
+.faq-question.open i{transform:rotate(180deg)}
+.faq-answer{padding:0 1rem;max-height:0;overflow:hidden;transition:all 0.3s ease;
+  color:#999;font-size:0.85rem;line-height:1.6}
+.faq-answer.open{padding:0 1rem 1rem 1rem;max-height:300px}
+
+/* SOCIAL */
+.social-links{display:flex;justify-content:center;gap:1rem;margin-top:1rem}
+.social-link{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;
+  justify-content:center;color:white;font-size:1.2rem;text-decoration:none;transition:all 0.3s ease}
+.social-link.facebook{background:#1877F2}
+.social-link.instagram{background:#E4405F}
+.social-link.whatsapp{background:#25D366}
+.social-link:active{transform:scale(0.9)}
+
+/* ABOUT */
+.about-card{background:var(--card-bg);border-radius:20px;padding:1.5rem;text-align:center;
+  box-shadow:var(--shadow);margin-bottom:1rem}
+.about-logo{width:100px;height:100px;border-radius:24px;margin:0 auto 1rem;
+  box-shadow:var(--shadow);background:var(--gradient-main);display:flex;align-items:center;justify-content:center;font-size:60px}
+.team-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:0.8rem}
+.team-card{background:var(--card-bg);border-radius:16px;padding:1rem;text-align:center;box-shadow:var(--shadow)}
+.team-avatar{width:60px;height:60px;background:var(--gradient-main);border-radius:50%;
+  margin:0 auto 0.8rem;display:flex;align-items:center;justify-content:center;font-size:1.5rem;color:white}
+
+/* GIFT CARD */
+.gift-card{background:var(--card-bg);border-radius:20px;padding:1.5rem;text-align:center;
+  box-shadow:var(--shadow);margin-bottom:1rem}
+.gift-icon{font-size:3rem;margin-bottom:1rem}
+.gift-title{font-weight:700;color:var(--text-color);margin-bottom:0.5rem}
+.gift-desc{color:#999;font-size:0.85rem;margin-bottom:1rem}
+.gift-price{font-size:1.5rem;color:var(--primary-turquoise);font-weight:800;margin-bottom:1rem}
+
+/* SERVICES */
+.services-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem}
+.service-card{background:var(--card-bg);border-radius:16px;padding:1.2rem;text-align:center;
+  box-shadow:var(--shadow);transition:all 0.3s ease;cursor:pointer}
+.service-card:active{transform:scale(0.97)}
+.service-icon{width:50px;height:50px;background:var(--gradient-main);border-radius:16px;
+  display:flex;align-items:center;justify-content:center;margin:0 auto 0.8rem;color:white;font-size:1.2rem}
+.service-title{font-weight:700;color:var(--text-color);font-size:0.9rem;margin-bottom:0.3rem}
+.service-desc{font-size:0.8rem;color:#999}
+
+/* REQUEST CARD */
+.request-card{background:var(--card-bg);border-radius:14px;padding:0.8rem;margin-bottom:0.8rem;
+  box-shadow:var(--shadow);border-right:3px solid var(--primary-turquoise)}
+.request-status{display:inline-block;padding:0.2rem 0.6rem;border-radius:15px;font-size:0.7rem;font-weight:700;margin-top:0.3rem}
+.request-status.pending{background:rgba(255,193,7,0.1);color:#ffc107}
+
+/* FORM */
+.form-group{margin-bottom:0.8rem}
+.form-group label{display:block;margin-bottom:0.3rem;color:var(--primary-purple);font-weight:700;font-size:0.85rem}
+.form-group input,.form-group select,.form-group textarea{width:100%;padding:0.8rem;
+  border:2px solid var(--border-color);border-radius:12px;font-family:'Tajawal',sans-serif;
+  font-size:0.95rem;background:var(--card-bg);color:var(--text-color)}
+.submit-btn{width:100%;background:var(--gradient-main);color:white;border:none;padding:0.9rem;
+  border-radius:12px;font-family:'Tajawal',sans-serif;font-size:1rem;font-weight:700;
+  cursor:pointer;margin-top:0.5rem}
+.submit-btn:active{transform:scale(0.98)}
+
+/* DETAIL BUTTONS */
+.detail-buttons{display:flex;gap:0.5rem;margin-bottom:1rem}
+.detail-btn{flex:1;padding:0.8rem;border-radius:12px;font-family:'Tajawal',sans-serif;
+  font-weight:700;font-size:0.9rem;cursor:pointer;border:none;display:flex;
+  align-items:center;justify-content:center;gap:0.3rem}
+.detail-btn.cart{background:var(--gradient-main);color:white}
+.detail-btn.buy{background:#ff4757;color:white}
+.detail-btn:active{transform:scale(0.97)}
+
+/* WISHLIST */
+.wishlist-btn{width:40px;height:40px;border-radius:50%;border:none;background:var(--light-bg);
+  color:#ff4757;display:flex;align-items:center;justify-content:center;cursor:pointer;
+  font-size:1.2rem;transition:all 0.3s ease}
+.wishlist-btn.active{background:#ff4757;color:white}
+.wishlist-btn:active{transform:scale(0.9)}
+
+/* HOURS TABLE */
+.hours-table{width:100%;border-collapse:collapse}
+.hours-table td{padding:0.6rem 0.8rem;border-bottom:1px solid var(--border-color);font-size:0.9rem}
+.hours-table tr:last-child td{border-bottom:none}
+.hours-table td:first-child{font-weight:700;color:var(--text-color)}
+.hours-table td:last-child{color:#999;text-align:left}
+.hours-table .closed{color:#ff4757;font-weight:700}
+
+/* COUNTDOWN */
+.countdown-container{background:var(--gradient-main);border-radius:20px;padding:1.5rem;
+  color:white;text-align:center;margin-bottom:1.5rem;box-shadow:var(--shadow)}
+.countdown-title{font-size:1.2rem;font-weight:900;margin-bottom:1rem}
+.countdown-timer{display:flex;justify-content:center;gap:0.5rem}
+.countdown-box{background:rgba(255,255,255,0.2);border-radius:12px;padding:0.5rem 0.8rem;
+  min-width:50px}
+.countdown-box .num{font-size:1.5rem;font-weight:800}
+.countdown-box .label{font-size:0.65rem;opacity:0.9}
+
+/* OFFERS */
+.offer-card{background:var(--gradient-main);border-radius:16px;padding:1.2rem;
+  color:white;margin-bottom:1rem;position:relative;overflow:hidden;box-shadow:var(--shadow)}
+.offer-badge{position:absolute;top:10px;right:10px;background:#ff4757;color:white;
+  padding:0.3rem 0.8rem;border-radius:20px;font-size:0.7rem;font-weight:700}
+.offer-title{font-size:1.1rem;font-weight:900;margin-bottom:0.5rem}
+.offer-desc{font-size:0.85rem;opacity:0.9;margin-bottom:1rem}
+.offer-price{font-size:1.3rem;font-weight:800}
+.offer-old-price{text-decoration:line-through;opacity:0.7;font-size:0.9rem;margin-right:0.5rem}
+
+/* GIFTS */
+.gift-grid{display:grid;grid-template-columns:1fr 1fr;gap:0.8rem}
+.gift-item{background:var(--card-bg);border-radius:16px;padding:1rem;text-align:center;
+  box-shadow:var(--shadow);cursor:pointer;transition:all 0.3s ease}
+.gift-item:active{transform:scale(0.97)}
+.gift-item-icon{font-size:2.5rem;margin-bottom:0.5rem}
+.gift-item-title{font-weight:700;color:var(--text-color);font-size:0.85rem;margin-bottom:0.3rem}
+.gift-item-price{color:var(--primary-turquoise);font-weight:800;font-size:1rem}
+
+/* MAINTENANCE FORM */
+.maintenance-form{background:var(--card-bg);border-radius:20px;padding:1.5rem;box-shadow:var(--shadow);margin-bottom:1rem}
+
+/* ANIMATIONS */
+@keyframes pulse-ring {
+  0% { transform: scale(0.8); opacity: 0.5; }
+  100% { transform: scale(1.3); opacity: 0; }
+}
+@keyframes pulse {
+  0%, 100% { transform: scale(1); }
+  50% { transform: scale(1.05); }
+}
+.pulse-ring {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  background: var(--primary-purple);
+  animation: pulse-ring 1.5s cubic-bezier(0.215, 0.61, 0.355, 1) infinite;
+}
+
+</style>
+</head>
+<body>
+
+<div class="phone-screen">
+<!-- STATUS BAR -->
+<div class="status-bar">
+<span id="clock">12:00</span>
+<div style="display:flex;gap:5px;align-items:center">
+<i class="fas fa-signal" style="font-size:0.7rem"></i>
+<i class="fas fa-wifi" style="font-size:0.7rem"></i>
+<i class="fas fa-battery-full" style="font-size:0.7rem"></i>
+</div>
+</div>
+
+<!-- APP CONTENT -->
+<div class="app-content" id="app-content">
+
+<!-- SPLASH SCREEN -->
+<div class="splash-screen" id="splash">
+<div class="splash-image">🎵</div>
+<div class="splash-title">MOSIQATI</div>
+<div class="splash-subtitle">عالم الموسيقى بين يديك</div>
+<div class="splash-loader"><div class="splash-loader-bar"></div></div>
+</div>
+
+<!-- HOME PAGE (FIRST) -->
+<div class="page-section active" id="home-section">
+<div class="hero-banner">
+<div class="hero-title">🎵 MOSIQATI</div>
+<div class="hero-subtitle">اكتشف عالم الآلات الموسيقية الفريدة</div>
+<div style="display:flex;gap:0.5rem">
+<button class="hero-btn" onclick="showSection('shop-section')">تسوق الآن</button>
+<button class="hero-btn" onclick="showAuthScreen()" style="background:rgba(255,255,255,0.2);color:white">تسجيل الدخول</button>
+</div>
+</div>
+
+<!-- COUNTDOWN -->
+<div class="countdown-container">
+<div class="countdown-title">🔥 عرض محدود!</div>
+<div class="countdown-timer" id="countdown-timer">
+<div class="countdown-box"><div class="num" id="cd-hours">00</div><div class="label">ساعة</div></div>
+<div class="countdown-box"><div class="num" id="cd-minutes">00</div><div class="label">دقيقة</div></div>
+<div class="countdown-box"><div class="num" id="cd-seconds">00</div><div class="label">ثانية</div></div>
+</div>
+</div>
+
+<div class="section-header">
+<span class="section-title">🔥 الأكثر مبيعاً</span>
+<a href="#" class="see-all" onclick="showSection('shop-section')">عرض الكل</a>
+</div>
+<div class="products-grid" id="featured-products"></div>
+</div>
+
+<!-- AUTH SCREEN (shown after splash) -->
+<div class="auth-screen" id="auth-screen">
+<div class="auth-logo">🎵</div>
+<div class="auth-title">MOSIQATI</div>
+<div class="auth-subtitle">عالم الموسيقى بين يديك</div>
+<div id="login-form" class="auth-form">
+<input type="email" class="auth-input" id="login-email" placeholder="البريد الإلكتروني" value="user@mosiqati.com">
+<input type="password" class="auth-input" id="login-password" placeholder="كلمة المرور" value="123456">
+<button class="auth-btn" onclick="login()">تسجيل الدخول</button>
+<div class="auth-divider">أو</div>
+<div class="social-login">
+<button class="social-btn"><i class="fab fa-google"></i></button>
+<button class="social-btn"><i class="fab fa-apple"></i></button>
+<button class="social-btn"><i class="fab fa-facebook"></i></button>
+</div>
+<p style="margin-top:1rem;color:#999;font-size:0.85rem"><span>ليس لديك حساب؟</span> <span class="auth-link" onclick="showRegister()">سجل الآن</span></p>
+</div>
+<div id="register-form" class="auth-form" style="display:none">
+<input type="text" class="auth-input" id="reg-name" placeholder="الاسم الكامل">
+<input type="email" class="auth-input" id="reg-email" placeholder="البريد الإلكتروني">
+<input type="password" class="auth-input" id="reg-password" placeholder="كلمة المرور">
+<button class="auth-btn" onclick="register()">إنشاء حساب</button>
+<p style="margin-top:1rem;color:#999;font-size:0.85rem"><span>لديك حساب؟</span> <span class="auth-link" onclick="showLogin()">سجل دخول</span></p>
+</div>
+</div>
+
+<!-- SHOP PAGE -->
+<div class="page-section" id="shop-section">
+<div class="section-header">
+<span class="section-title">🛍️ المتجر</span>
+</div>
+<div class="products-grid" id="products-grid"></div>
+</div>
+
+<!-- CART PAGE -->
+<div class="page-section" id="cart-section">
+<div class="section-header">
+<span class="section-title">🛒 سلة التسوق</span>
+</div>
+<div id="cart-items">
+<div class="empty-state">
+<i class="fas fa-shopping-cart"></i>
+<p>السلة فارغة</p>
+</div>
+</div>
+<div class="cart-summary">
+<div>المجموع الكلي</div>
+<div class="total-price" id="cart-total">0 د.أ</div>
+<button class="auth-btn" onclick="checkout()">إتمام الشراء</button>
+</div>
+</div>
+
+<!-- WISHLIST PAGE -->
+<div class="page-section" id="wishlist-section">
+<div class="section-header">
+<span class="section-title">❤️ المفضلة</span>
+</div>
+<div id="wishlist-items">
+<div class="empty-state">
+<i class="fas fa-heart"></i>
+<p>المفضلة فارغة</p>
+</div>
+</div>
+</div>
+
+<!-- ORDERS PAGE -->
+<div class="page-section" id="orders-section">
+<div class="section-header">
+<span class="section-title">📦 طلباتي</span>
+</div>
+<div class="request-card">
+<div style="font-weight:700">طلب #1234</div>
+<div style="color:#999;font-size:0.85rem">جيتار كلاسيكي - 450 د.أ</div>
+<span class="request-status pending">قيد التنفيذ</span>
+</div>
+<div class="request-card">
+<div style="font-weight:700">طلب #1235</div>
+<div style="color:#999;font-size:0.85rem">بيانو رقمي - 1200 د.أ</div>
+<span class="request-status pending" style="background:rgba(46,213,115,0.1);color:#2ed573">تم التوصيل</span>
+</div>
+</div>
+
+<!-- ABOUT PAGE -->
+<div class="page-section" id="about-section">
+<div class="about-card">
+<div class="about-logo">🎵</div>
+<h2 style="color:var(--primary-purple);margin-bottom:0.5rem">MOSIQATI</h2>
+<p style="color:#999;font-size:0.9rem">متجر متخصص في بيع الآلات الموسيقية الأصلية بأفضل الأسعار منذ عام 2015. نقدم تشكيلة واسعة من الجيتارات، البيانو، العود، الكمان والمزيد من الآلات الشرقية والغربية.</p>
+<div class="social-links">
+<a href="#" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+<a href="#" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+<a href="#" class="social-link whatsapp"><i class="fab fa-whatsapp"></i></a>
+</div>
+</div>
+
+<div class="section-header">
+<span class="section-title">🕐 ساعات العمل</span>
+</div>
+<div class="contact-card">
+<table class="hours-table">
+<tr><td>الأحد - الخميس</td><td>9 ص - 5 م</td></tr>
+<tr><td>الجمعة</td><td class="closed">مغلق</td></tr>
+<tr><td>السبت</td><td class="closed">مغلق</td></tr>
+</table>
+</div>
+
+<div class="section-header">
+<span class="section-title">👥 فريق العمل</span>
+</div>
+<div class="team-grid">
+<div class="team-card">
+<div class="team-avatar">👨‍💼</div>
+<div style="font-weight:700">أحمد محمد</div>
+<div style="color:#999;font-size:0.8rem">المدير العام</div>
+</div>
+<div class="team-card">
+<div class="team-avatar">👩‍💼</div>
+<div style="font-weight:700">سارة أحمد</div>
+<div style="color:#999;font-size:0.8rem">مديرة المبيعات</div>
+</div>
+</div>
+</div>
+
+<!-- CONTACT PAGE -->
+<div class="page-section" id="contact-section">
+<div class="contact-card">
+<div class="contact-item">
+<div class="contact-icon"><i class="fas fa-map-marker-alt"></i></div>
+<div>
+<div style="font-weight:700">العنوان</div>
+<div style="color:#999;font-size:0.85rem">الأردن، عمان - شارع الموسيقى</div>
+</div>
+</div>
+<div class="contact-item">
+<div class="contact-icon"><i class="fas fa-phone"></i></div>
+<div>
+<div style="font-weight:700">الهاتف</div>
+<div style="color:#999;font-size:0.85rem">+962 6 222 5229</div>
+</div>
+</div>
+<div class="contact-item">
+<div class="contact-icon"><i class="fas fa-mobile-alt"></i></div>
+<div>
+<div style="font-weight:700">الجوال</div>
+<div style="color:#999;font-size:0.85rem">+962 78 060 4466</div>
+</div>
+</div>
+<div class="contact-item">
+<div class="contact-icon"><i class="fas fa-envelope"></i></div>
+<div>
+<div style="font-weight:700">البريد</div>
+<div style="color:#999;font-size:0.85rem">info@mosiqati.com</div>
+</div>
+</div>
+</div>
+
+<div class="contact-card">
+<div style="font-weight:700;margin-bottom:0.8rem">🕐 ساعات العمل</div>
+<table class="hours-table">
+<tr><td>الأحد - الخميس</td><td>9 ص - 5 م</td></tr>
+<tr><td>الجمعة</td><td class="closed">مغلق</td></tr>
+<tr><td>السبت</td><td class="closed">مغلق</td></tr>
+</table>
+</div>
+
+<div style="background:var(--card-bg);border-radius:20px;padding:1.2rem;box-shadow:var(--shadow);margin-bottom:1rem">
+<div class="form-group">
+<label>الاسم</label>
+<input type="text" placeholder="أدخل اسمك" id="contact-name">
+</div>
+<div class="form-group">
+<label>البريد الإلكتروني</label>
+<input type="email" placeholder="أدخل بريدك" id="contact-email">
+</div>
+<div class="form-group">
+<label>الرسالة</label>
+<textarea rows="4" placeholder="اكتب رسالتك هنا..." id="contact-msg"></textarea>
+</div>
+<button class="submit-btn" onclick="sendContact()">إرسال</button>
+</div>
+
+<div class="social-links">
+<a href="#" class="social-link facebook"><i class="fab fa-facebook-f"></i></a>
+<a href="#" class="social-link instagram"><i class="fab fa-instagram"></i></a>
+<a href="#" class="social-link whatsapp"><i class="fab fa-whatsapp"></i></a>
+</div>
+</div>
+
+
+<!-- FAQ PAGE -->
+<div class="page-section" id="faq-section">
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>كيف يمكنني الطلب؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">يمكنك الطلب بسهولة من خلال المتجر الإلكتروني. أضف المنتجات للسلة واتبع خطوات الدفع.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>ما هي طرق الدفع المتاحة؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">نقبل الدفع نقداً عند الاستلام، والبطاقات الائتمانية، وPayPal.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>هل يوجد ضمان على المنتجات؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">نعم، جميع منتجاتنا مضمونة لمدة سنة كاملة ضد عيوب الصناعة.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>كيف ألغي طلبي؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">يمكنك إلغاء طلبك خلال 24 ساعة من تقديمه من خلال صفحة طلباتي أو التواصل مع خدمة العملاء.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>كيف أعدّل طلبي؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">لتعديل طلبك، يرجى التواصل معنا فوراً عبر الهاتف أو الواتساب قبل شحن الطلب.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>كيف أستخدم كود الخصم؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">أدخل كود الخصم في حقل 'كود الخصم' عند إتمام الشراء وسيتم تطبيق الخصم تلقائياً.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>هل يمكنني الدفع نقداً عند الاستلام؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">نعم، ندعم الدفع نقداً عند الاستلام في جميع مدن المملكة.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>كيف أحصل على تأكيد الطلب؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">سيتم إرسال تأكيد الطلب إلى بريدك الإلكتروني فوراً بعد إتمام الشراء.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>ما هي مدن الشحن المتاحة؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">نشحن إلى جميع محافظات الأردن: عمان، إربد، الزرقاء، العقبة، معان، الكرك، مادبا، جرش، عجلون، الطفيلة، البلقاء، والمفرق.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>ما هو موعد التوصيل المتوقع؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">التوصيل خلال 1-3 أيام عمل داخل عمان، و3-5 أيام عمل للمحافظات الأخرى.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>كيف أتتبع طلبي؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">يمكنك تتبع طلبك من خلال رقم التتبع المرسل إلى بريدك الإلكتروني أو عبر صفحة طلباتي في التطبيق.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>ماذا لو كان العنوان غير صحيح؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">يرجى التأكد من صحة العنوان قبل إتمام الطلب. إذا كان العنوان خاطئاً، سيتم إعادة الشحنة وقد تُطبق رسوم إضافية.</div>
+</div>
+<div class="faq-item">
+<div class="faq-question" onclick="toggleFaq(this)">
+<span>كيف يمكنني إعادة منتج؟</span>
+<i class="fas fa-chevron-down"></i>
+</div>
+<div class="faq-answer">يمكنك إرجاع المنتج خلال 14 يوماً من تاريخ الاستلام بشرط أن يكون بحالته الأصلية ومع الفاتورة.</div>
+</div>
+</div>
+
+<!-- SETTINGS PAGE -->
+<div class="page-section" id="settings-section">
+<div class="settings-list">
+<div class="settings-item" onclick="showSection('home-section')">
+<div class="settings-item-left">
+<div class="settings-icon" style="background:var(--gradient-main)"><i class="fas fa-home"></i></div>
+<div class="settings-info">
+<h4 >الصفحة الرئيسية</h4>
+<p >العودة للصفحة الرئيسية</p>
+</div>
+</div>
+<i class="fas fa-chevron-left" style="color:#999"></i>
+</div>
+<div class="settings-item">
+<div class="settings-item-left">
+<div class="settings-icon"><i class="fas fa-bell"></i></div>
+<div class="settings-info">
+<h4>الإشعارات</h4>
+<p>تفعيل إشعارات التطبيق</p>
+</div>
+</div>
+<div class="toggle-switch active" onclick="this.classList.toggle('active')"></div>
+</div>
+<div class="settings-item" onclick="showSection('contact-section')">
+<div class="settings-item-left">
+<div class="settings-icon"><i class="fas fa-headset"></i></div>
+<div class="settings-info">
+<h4 >الدعم الفني</h4>
+<p >تواصل مع فريق الدعم</p>
+</div>
+</div>
+<i class="fas fa-chevron-left" style="color:#999"></i>
+</div>
+<div class="settings-item" onclick="showSection('faq-section')">
+<div class="settings-item-left">
+<div class="settings-icon"><i class="fas fa-question-circle"></i></div>
+<div class="settings-info">
+<h4 >الأسئلة الشائعة</h4>
+<p >إجابات على استفساراتك</p>
+</div>
+</div>
+<i class="fas fa-chevron-left" style="color:#999"></i>
+</div>
+<div class="settings-item" onclick="showSection('orders-section')">
+<div class="settings-item-left">
+<div class="settings-icon"><i class="fas fa-box"></i></div>
+<div class="settings-info">
+<h4 >طلباتي</h4>
+<p >عرض سجل الطلبات</p>
+</div>
+</div>
+<i class="fas fa-chevron-left" style="color:#999"></i>
+</div>
+<div class="settings-item" onclick="showSection('wishlist-section')">
+<div class="settings-item-left">
+<div class="settings-icon"><i class="fas fa-heart"></i></div>
+<div class="settings-info">
+<h4 >المفضلة</h4>
+<p >المنتجات المفضلة</p>
+</div>
+</div>
+<i class="fas fa-chevron-left" style="color:#999"></i>
+</div>
+<div class="settings-item" onclick="logout()">
+<div class="settings-item-left">
+<div class="settings-icon" style="background:linear-gradient(135deg,#ff4757 0%,#ff6b81 100%)"><i class="fas fa-sign-out-alt"></i></div>
+<div class="settings-info">
+<h4 >تسجيل الخروج</h4>
+<p >خروج من الحساب</p>
+</div>
+</div>
+<i class="fas fa-chevron-left" style="color:#999"></i>
+</div>
+</div>
+</div>
+
+<!-- GIFTS PAGE -->
+<div class="page-section" id="gifts-section">
+<div class="section-header">
+<span class="section-title">🎁 بطاقات الهدايا</span>
+</div>
+<div class="gift-card">
+<div class="gift-icon">🎁</div>
+<div class="gift-title">بطاقة هدية MOSIQATI</div>
+<div class="gift-desc">اهدِ أحبائك تجربة موسيقية لا تُنسى</div>
+<div class="gift-price">50 - 500 د.أ</div>
+<button class="auth-btn" onclick="showToast('تمت إضافة بطاقة الهدية!')">اشترِ الآن</button>
+</div>
+<div class="section-header">
+<span class="section-title">🎵 خيارات الهدايا</span>
+</div>
+<div class="gift-grid">
+<div class="gift-item" onclick="showToast('تمت الإضافة للسلة!')">
+<div class="gift-item-icon">🎸</div>
+<div class="gift-item-title">حزمة مبتدئ</div>
+<div class="gift-item-price">150 د.أ</div>
+</div>
+<div class="gift-item" onclick="showToast('تمت الإضافة للسلة!')">
+<div class="gift-item-icon">🎹</div>
+<div class="gift-item-title">حزمة عازف</div>
+<div class="gift-item-price">300 د.أ</div>
+</div>
+<div class="gift-item" onclick="showToast('تمت الإضافة للسلة!')">
+<div class="gift-item-icon">🎻</div>
+<div class="gift-item-title">حزمة محترف</div>
+<div class="gift-item-price">500 د.أ</div>
+</div>
+<div class="gift-item" onclick="showToast('تمت الإضافة للسلة!')">
+<div class="gift-item-icon">🥁</div>
+<div class="gift-item-title">حزمة إيقاع</div>
+<div class="gift-item-price">250 د.أ</div>
+</div>
+</div>
+</div>
+
+<!-- SERVICES PAGE -->
+<div class="page-section" id="services-section">
+<div class="section-header">
+<span class="section-title">⚙️ خدماتنا</span>
+</div>
+
+<!-- MAINTENANCE REQUEST FORM -->
+<div class="maintenance-form">
+<div style="font-weight:900;color:var(--primary-purple);font-size:1.1rem;margin-bottom:1rem;text-align:center">🔧 طلب صيانة</div>
+<div class="form-group">
+<label>الاسم</label>
+<input type="text" id="maint-name" placeholder="أدخل اسمك">
+</div>
+<div class="form-group">
+<label>رقم الهاتف</label>
+<input type="tel" id="maint-phone" placeholder="أدخل رقم هاتفك">
+</div>
+<div class="form-group">
+<label>نوع الآلة</label>
+<select id="maint-type">
+<option value="">اختر نوع الآلة</option>
+<option value="guitar">جيتار</option>
+<option value="piano">بيانو</option>
+<option value="violin">كمان</option>
+<option value="oud">عود</option>
+<option value="other">آخر</option>
+</select>
+</div>
+<div class="form-group">
+<label>وصف المشكلة</label>
+<textarea rows="3" id="maint-desc" placeholder="اشرح المشكلة بالتفصيل..."></textarea>
+</div>
+<button class="submit-btn" onclick="submitMaintenance()">إرسال طلب الصيانة</button>
+</div>
+
+<div class="section-header">
+<span class="section-title">🛠️ خدماتنا</span>
+</div>
+<div class="services-grid">
+<div class="service-card" onclick="showMaintenanceModal()">
+<div class="service-icon"><i class="fas fa-tools"></i></div>
+<div class="service-title">صيانة الآلات</div>
+<div class="service-desc">إصلاح وصيانة جميع الآلات الموسيقية - اضغط للطلب</div>
+</div>
+<div class="service-card" onclick="showToast('سيتم التواصل معك قريباً!')">
+<div class="service-icon"><i class="fas fa-music"></i></div>
+<div class="service-title">دروس موسيقية</div>
+<div class="service-desc">دروس خصوصية لجميع الأعمار</div>
+</div>
+<div class="service-card" onclick="showToast('سيتم التواصل معك قريباً!')">
+<div class="service-icon"><i class="fas fa-guitar"></i></div>
+<div class="service-title">تعديل وتخصيص</div>
+<div class="service-desc">تخصيص الآلات حسب طلبك</div>
+</div>
+<div class="service-card" onclick="showToast('سيتم التواصل معك قريباً!')">
+<div class="service-icon"><i class="fas fa-truck"></i></div>
+<div class="service-title">توصيل سريع</div>
+<div class="service-desc">توصيل لجميع المحافظات</div>
+</div>
+<div class="service-card" onclick="showToast('سيتم التواصل معك قريباً!')">
+<div class="service-icon"><i class="fas fa-shield-alt"></i></div>
+<div class="service-title">ضمان سنة</div>
+<div class="service-desc">ضمان شامل على جميع المنتجات</div>
+</div>
+<div class="service-card" onclick="showToast('سيتم التواصل معك قريباً!')">
+<div class="service-icon"><i class="fas fa-exchange-alt"></i></div>
+<div class="service-title">استبدال سهل</div>
+<div class="service-desc">استبدال خلال 14 يوماً</div>
+</div>
+</div>
+</div>
+
+<!-- OFFERS PAGE -->
+<div class="page-section" id="offers-section">
+<div class="section-header">
+<span class="section-title">🔥 العروض</span>
+</div>
+<div class="offer-card">
+<div class="offer-badge">خصم 30%</div>
+<div class="offer-title">جيتار كلاسيكي ياماها</div>
+<div class="offer-desc">جيتار كلاسيكي احترافي مع حقيبة وريشة مجاناً</div>
+<div><span class="offer-old-price">650 د.أ</span><span class="offer-price">450 د.أ</span></div>
+<button class="auth-btn" style="margin-top:1rem" onclick="addToCart(1);showToast('تمت الإضافة للسلة!')">أضف للسلة</button>
+</div>
+<div class="offer-card">
+<div class="offer-badge">خصم 25%</div>
+<div class="offer-title">بيانو رقمي كاسيو</div>
+<div class="offer-desc">بيانو رقمي 88 مفتاح مع حامل وسماعات</div>
+<div><span class="offer-old-price">1600 د.أ</span><span class="offer-price">1200 د.أ</span></div>
+<button class="auth-btn" style="margin-top:1rem" onclick="addToCart(2);showToast('تمت الإضافة للسلة!')">أضف للسلة</button>
+</div>
+</div>
+
+<!-- PRODUCT MODAL -->
+<div class="modal-overlay" id="product-modal">
+<div class="modal-content">
+<button class="modal-close" onclick="closeModal()"><i class="fas fa-times"></i></button>
+<div id="detail-icon" style="font-size:4rem;text-align:center;margin:1rem 0">🎸</div>
+<h2 id="detail-title" style="text-align:center;color:var(--text-color)">جيتار كلاسيكي</h2>
+
+<div id="detail-price" style="text-align:center;font-size:1.8rem;color:var(--primary-turquoise);font-weight:900;margin:0.5rem 0">450 د.أ <span style="font-size:1rem;color:#999;font-weight:400">(دينار أردني)</span></div>
+<div id="detail-stock" style="text-align:center;font-size:0.9rem;color:#2ed573;font-weight:700;margin-bottom:0.5rem">✅ متوفر - 12 قطعة</div>
+
+<div style="display:flex;justify-content:center;gap:1rem;margin:1rem 0">
+<button class="wishlist-btn" onclick="toggleWishlist(this)" id="modal-wishlist-btn"><i class="fas fa-heart"></i></button>
+</div>
+<div class="detail-buttons">
+<button class="detail-btn cart" onclick="addToCartFromModal()"><i class="fas fa-shopping-cart"></i> <span>أضف للسلة</span></button>
+<button class="detail-btn buy" onclick="buyNow()"><i class="fas fa-bolt"></i> <span>اشترِ الآن</span></button>
+</div>
+
+<!-- SPECS TABLE -->
+<div style="background:var(--light-bg);border-radius:16px;padding:1rem;margin-top:1rem">
+<p style="color:var(--primary-purple);font-weight:800;margin-bottom:0.8rem;font-size:1rem">📋 المواصفات الفنية</p>
+<table id="detail-specs" style="width:100%;font-size:0.85rem">
+<!-- Filled by JS -->
+</table>
+</div>
+
+<div style="color:#999;font-size:0.9rem;line-height:1.6;margin-top:1rem">
+<p style="margin-bottom:0.5rem"><strong>📝 الوصف:</strong></p>
+<p id="detail-desc">آلة موسيقية عالية الجودة...</p>
+</div>
+</div>
+</div>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+</div><!-- end app-content -->
+
+<!-- BOTTOM NAVIGATION -->
+<nav class="bottom-nav">
+<button class="bottom-nav-item active" data-section="home-section" onclick="showSection('home-section')">
+<i class="fas fa-home"></i>
+<span>الرئيسية</span>
+</button>
+<button class="bottom-nav-item" data-section="shop-section" onclick="showSection('shop-section')">
+<i class="fas fa-store"></i>
+<span>المتجر</span>
+</button>
+<button class="bottom-nav-item" data-section="gifts-section" onclick="showSection('gifts-section')">
+<i class="fas fa-gift"></i>
+<span>الهدايا</span>
+</button>
+<button class="bottom-nav-item" data-section="services-section" onclick="showSection('services-section')">
+<i class="fas fa-cogs"></i>
+<span>الخدمات</span>
+</button>
+<button class="bottom-nav-item" data-section="offers-section" onclick="showSection('offers-section')">
+<i class="fas fa-fire"></i>
+<span>العروض</span>
+</button>
+<button class="bottom-nav-item" data-section="settings-section" onclick="showSection('settings-section')">
+<i class="fas fa-cog"></i>
+<span>الإعدادات</span>
+</button>
+<button class="bottom-nav-item" data-section="contact-section" onclick="showSection('contact-section')">
+<i class="fas fa-phone-alt"></i>
+<span>اتصل بنا</span>
+</button>
+</nav>
+
+</div><!-- end phone-screen -->
+
+<script>
+// ===== DATA =====
+const products = [
+    {id: 1, name: 'جيتار كلاسيكي ياماها C40', price: 450, rating: 4.8, icon: '🎸', category: 'guitars', 
+     specs: {brand: 'Yamaha', origin: 'إندونيسيا', material: 'خشب spruce صلب', strings: 'نايلون 6 أوتار', warranty: 'سنة'},
+     stock: 12, reviews: 128, desc: 'جيتار كلاسيكي احترافي للمبتدئين والمحترفين. صوت نقي وتصميم أنيق.'},
+    {id: 2, name: 'بيانو رقمي كاسيو CDP-S150', price: 1200, rating: 4.9, icon: '🎹', category: 'pianos',
+     specs: {brand: 'Casio', origin: 'اليابان', keys: '88 مفتاح weighted', polyphony: '64 صوت', warranty: 'سنتين'},
+     stock: 5, reviews: 89, desc: 'بيانو رقمي احترافي بمفاتيح ثقيلة تشبه البيانو الحقيقي. مثالي للتعلم والعزف.'},
+    {id: 3, name: 'طبلة شرقية احترافية', price: 280, rating: 4.7, icon: '🥁', category: 'percussion',
+     specs: {brand: 'Gawharet El Fan', origin: 'مصر', diameter: '22 بوصة', skin: 'جلد طبيعي', warranty: '6 أشهر'},
+     stock: 20, reviews: 245, desc: 'طبلة شرقية مصنوعة يدوياً من أفضل أنواع الجلد. صوت عميق وقوي.'},
+    {id: 4, name: 'كمان احترافي Stradivarius', price: 890, rating: 4.6, icon: '🎻', category: 'strings',
+     specs: {brand: 'Stentor', origin: 'الصين', wood: 'قيقب صلب', bow: 'شعر حصان طبيعي', warranty: 'سنة'},
+     stock: 3, reviews: 67, desc: 'كمان كلاسيكي بجودة عالية. يأتي مع حقيبة وقوس وصنارة.'},
+    {id: 5, name: 'عُود عربي سوري', price: 650, rating: 4.8, icon: '🪕', category: 'strings',
+     specs: {brand: 'Zeryab', origin: 'سوريا', wood: 'توت مصري', strings: '11 وتر', warranty: 'سنة'},
+     stock: 8, reviews: 156, desc: 'عود عربي تقليدي مصنوع من خشب التوت المصري. صوت دافئ وأصيل.'},
+    {id: 6, name: 'درامز إلكترونية Roland TD-07', price: 1500, rating: 4.5, icon: '🥁', category: 'percussion',
+     specs: {brand: 'Roland', origin: 'اليابان', pads: '5 pads + 3 cymbals', sounds: '143 صوت', warranty: 'سنتين'},
+     stock: 2, reviews: 45, desc: 'درامز إلكترونية احترافية للاستوديو والحفلات. أصوات واقعية ومستجيبة.'},
+    {id: 7, name: 'ناي مصري احترافي', price: 180, rating: 4.9, icon: '🎶', category: 'wind',
+     specs: {brand: 'مصري تقليدي', origin: 'مصر', material: 'خيزران مصري', scale: 'دو كبير', warranty: '3 أشهر'},
+     stock: 35, reviews: 312, desc: 'ناي مصري تقليدي مصنوع من خيزران النيل. صوت نقي وعذب.'},
+    {id: 8, name: 'قانون شرقي تركي', price: 750, rating: 4.7, icon: '🎵', category: 'strings',
+     specs: {brand: 'Saz Müzik', origin: 'تركيا', wood: 'جوز أمريكي', strings: '78 وتر', warranty: 'سنة'},
+     stock: 6, reviews: 98, desc: 'قانون شرقي بجودة عالية. صوت غني وممتد. مناسب للعزف المنفرد والجماعي.'},
+];
+
+let cart = [];
+let wishlist = [];
+let currentModalProduct = null;
+
+// ===== SPLASH SCREEN =====
+window.addEventListener('load', function() {
+    setTimeout(() => {
+        const splash = document.getElementById('splash');
+        if(splash) {
+            splash.classList.add('hidden');
+            setTimeout(() => {
+                splash.style.display = 'none';
+                // Show home section first
+                showSection('home-section');
+                startCountdown();
+            }, 800);
+        }
+    }, 3000);
+});
+
+function showAuthScreen() {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+    const authScreen = document.getElementById('auth-screen');
+    if(authScreen) authScreen.classList.add('active');
+    document.querySelectorAll('.bottom-nav-item').forEach(item => item.classList.remove('active'));
+}
+
+// ===== AUTH =====
+function showLogin() {
+    document.getElementById('login-form').style.display = 'block';
+    document.getElementById('register-form').style.display = 'none';
+}
+
+function showRegister() {
+    document.getElementById('login-form').style.display = 'none';
+    document.getElementById('register-form').style.display = 'block';
+}
+
+function login() {
+    const email = document.getElementById('login-email').value;
+    const password = document.getElementById('login-password').value;
+    if(email && password) {
+        document.getElementById('auth-screen').classList.remove('active');
+        showSection('home-section');
+        showToast('✅ تم تسجيل الدخول بنجاح!');
+    } else {
+        showToast('⚠️ يرجى إدخال البريد وكلمة المرور');
+    }
+}
+
+function register() {
+    const name = document.getElementById('reg-name').value;
+    const email = document.getElementById('reg-email').value;
+    const password = document.getElementById('reg-password').value;
+    if(name && email && password) {
+        document.getElementById('auth-screen').classList.remove('active');
+        showSection('home-section');
+        showToast('✅ تم إنشاء الحساب بنجاح!');
+    } else {
+        showToast('⚠️ يرجى ملء جميع الحقول');
+    }
+}
+
+// ===== NAVIGATION =====
+function showSection(sectionId) {
+    document.querySelectorAll('.page-section').forEach(s => s.classList.remove('active'));
+
+    const authScreen = document.getElementById('auth-screen');
+    if(authScreen) authScreen.classList.remove('active');
+
+    const target = document.getElementById(sectionId);
+    if(target) {
+        target.classList.add('active');
+    }
+
+    document.querySelectorAll('.bottom-nav-item').forEach(item => {
+        item.classList.remove('active');
+        if(item.dataset.section === sectionId) {
+            item.classList.add('active');
+        }
+    });
+
+    document.getElementById('app-content').scrollTop = 0;
+
+    if(sectionId === 'cart-section') {
+        renderCart();
+    }
+    if(sectionId === 'wishlist-section') {
+        renderWishlist();
+    }
+}
+
+// ===== PRODUCTS =====
+function renderProducts() {
+    const grid = document.getElementById('products-grid');
+    const featured = document.getElementById('featured-products');
+
+    if(grid) {
+        grid.innerHTML = products.map(p => createProductCard(p)).join('');
+    }
+
+    if(featured) {
+        featured.innerHTML = products.slice(0, 4).map(p => createProductCard(p)).join('');
+    }
+}
+
+function createProductCard(p) {
+    const stockBadge = p.stock < 5 
+        ? `<span class="product-badge" style="background:#ff4757;font-size:0.6rem">باقي ${p.stock}</span>`
+        : p.stock < 10 
+            ? `<span class="product-badge" style="background:#ffa502;font-size:0.6rem">باقي ${p.stock}</span>`
+            : '';
+    return `
+        <div class="product-card" onclick="showProductDetail(${p.id})">
+            <div class="product-image">${p.icon}${stockBadge}</div>
+            <div class="product-info">
+                <div class="product-title">${p.name}</div>
+                <div class="product-price">${p.price} د.أ <span style="font-size:0.7rem;color:#999">(JOD)</span></div>
+                <div class="product-rating">${'★'.repeat(Math.floor(p.rating))}${'☆'.repeat(5-Math.floor(p.rating))} ${p.rating} <span style="color:#999;font-size:0.65rem">(${p.reviews})</span></div>
+                <button class="add-btn" onclick="event.stopPropagation(); addToCart(${p.id})">
+                    <i class="fas fa-shopping-cart"></i> أضف للسلة
+                </button>
+            </div>
+        </div>
+    `;
+}
+
+function showProductDetail(id) {
+    const p = products.find(x => x.id === id);
+    if(!p) return;
+
+    currentModalProduct = p;
+    document.getElementById('detail-title').textContent = p.name;
+    document.getElementById('detail-price').innerHTML = p.price + ' د.أ <span style="font-size:1rem;color:#999;font-weight:400">(دينار أردني)</span>';
+    document.getElementById('detail-icon').textContent = p.icon;
+
+    // Stock display
+    const stockEl = document.getElementById('detail-stock');
+    if(stockEl) {
+        if(p.stock === 0) {
+            stockEl.innerHTML = '❌ نفذت الكمية';
+            stockEl.style.color = '#ff4757';
+        } else if(p.stock < 5) {
+            stockEl.innerHTML = '⚠️ باقي ' + p.stock + ' فقط!';
+            stockEl.style.color = '#ffa502';
+        } else {
+            stockEl.innerHTML = '✅ متوفر - ' + p.stock + ' قطعة';
+            stockEl.style.color = '#2ed573';
+        }
+    }
+
+    // Fill specs table
+    const specsTable = document.getElementById('detail-specs');
+    if(specsTable && p.specs) {
+        const specsLabels = {
+            brand: 'العلامة التجارية', origin: 'بلد الصنع', material: 'المواد', wood: 'نوع الخشب', strings: 'الأوتار', keys: 'المفاتيح', polyphony: 'البوليفوني', diameter: 'القطر', skin: 'الجلد', bow: 'القوس', warranty: 'الضمان', pads: 'الPads', sounds: 'الأصوات', scale: 'المقياس'
+        };
+        let specsHtml = '';
+        for(let key in p.specs) {
+            const label = specsLabels[key] || key;
+            specsHtml += `<tr style="border-bottom:1px solid var(--border-color)"><td style="padding:0.5rem 0;font-weight:700;color:var(--text-color)">${label}</td><td style="padding:0.5rem 0;color:#999;text-align:left">${p.specs[key]}</td></tr>`;
+        }
+        specsTable.innerHTML = specsHtml;
+    }
+
+    // Description
+    const descEl = document.getElementById('detail-desc');
+    if(descEl && p.desc) {
+        descEl.textContent = p.desc;
+    }
+
+    const wishlistBtn = document.getElementById('modal-wishlist-btn');
+    const isInWishlist = wishlist.some(w => w.id === p.id);
+    if(isInWishlist) {
+        wishlistBtn.classList.add('active');
+    } else {
+        wishlistBtn.classList.remove('active');
+    }
+
+    document.getElementById('product-modal').classList.add('active');
+}
+
+function closeModal() {
+    document.getElementById('product-modal').classList.remove('active');
+    currentModalProduct = null;
+}
+
+function addToCartFromModal() {
+    if(currentModalProduct) {
+        addToCart(currentModalProduct.id);
+        closeModal();
+    }
+}
+
+function buyNow() {
+    if(currentModalProduct) {
+        addToCart(currentModalProduct.id);
+        closeModal();
+        showSection('cart-section');
+        showToast('✅ تمت إضافة الطلب!');
+    }
+}
+
+// ===== CART =====
+function addToCart(id) {
+    const p = products.find(x => x.id === id);
+    if(p) {
+        cart.push(p);
+        updateCartBadge();
+        showToast('✅ تمت الإضافة للسلة!');
+    }
+}
+
+function updateCartBadge() {
+    const badges = document.querySelectorAll('.badge');
+    badges.forEach(b => {
+        b.textContent = cart.length;
+        b.style.display = cart.length > 0 ? 'flex' : 'none';
+    });
+}
+
+function removeFromCart(index) {
+    cart.splice(index, 1);
+    renderCart();
+    updateCartBadge();
+}
+
+function renderCart() {
+    const container = document.getElementById('cart-items');
+    if(!container) return;
+
+    if(cart.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-shopping-cart" style="font-size:3rem;margin-bottom:0.8rem;opacity:0.5"></i>
+                <p>السلة فارغة</p>
+            </div>
+        `;
+        document.getElementById('cart-total').textContent = '0 د.أ';
+        return;
+    }
+
+    let total = 0;
+    container.innerHTML = cart.map((item, i) => {
+        total += item.price;
+        return `
+            <div class="cart-item">
+                <div class="cart-item-image">${item.icon}</div>
+                <div class="cart-item-details">
+                    <div class="cart-item-title">${item.name}</div>
+                    <div class="cart-item-price">${item.price} د.أ</div>
+                </div>
+                <button class="remove-btn" onclick="removeFromCart(${i})">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+    }).join('');
+
+    document.getElementById('cart-total').textContent = total + ' د.أ';
+}
+
+function checkout() {
+    if(cart.length === 0) {
+        showToast('⚠️ السلة فارغة!');
+        return;
+    }
+    showToast('✅ تم تأكيد الطلب بنجاح!');
+    cart = [];
+    renderCart();
+    updateCartBadge();
+}
+
+// ===== WISHLIST =====
+function toggleWishlist(btn) {
+    btn.classList.toggle('active');
+    const isActive = btn.classList.contains('active');
+
+    if(currentModalProduct) {
+        if(isActive) {
+            if(!wishlist.some(w => w.id === currentModalProduct.id)) {
+                wishlist.push(currentModalProduct);
+            }
+        } else {
+            wishlist = wishlist.filter(w => w.id !== currentModalProduct.id);
+        }
+    }
+
+    showToast(isActive ? '❤️ تمت الإضافة للمفضلة!' : '💔 تمت الإزالة من المفضلة');
+}
+
+function renderWishlist() {
+    const container = document.getElementById('wishlist-items');
+    if(!container) return;
+
+    if(wishlist.length === 0) {
+        container.innerHTML = `
+            <div class="empty-state">
+                <i class="fas fa-heart" style="font-size:3rem;margin-bottom:0.8rem;opacity:0.5"></i>
+                <p>المفضلة فارغة</p>
+            </div>
+        `;
+        return;
+    }
+
+    container.innerHTML = wishlist.map((item, i) => `
+        <div class="cart-item">
+            <div class="cart-item-image">${item.icon}</div>
+            <div class="cart-item-details">
+                <div class="cart-item-title">${item.name}</div>
+                <div class="cart-item-price">${item.price} د.أ</div>
+            </div>
+            <button class="remove-btn" onclick="removeFromWishlist(${i})" style="background:#ff4757">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `).join('');
+}
+
+function removeFromWishlist(index) {
+    wishlist.splice(index, 1);
+    renderWishlist();
+}
+
+// ===== MAINTENANCE REQUEST =====
+function submitMaintenance() {
+    const name = document.getElementById('maint-name').value;
+    const phone = document.getElementById('maint-phone').value;
+    const type = document.getElementById('maint-type').value;
+    const desc = document.getElementById('maint-desc').value;
+
+    if(name && phone && type && desc) {
+        showToast('✅ تم إرسال طلب الصيانة بنجاح!');
+        document.getElementById('maint-name').value = '';
+        document.getElementById('maint-phone').value = '';
+        document.getElementById('maint-type').value = '';
+        document.getElementById('maint-desc').value = '';
+    } else {
+        showToast('⚠️ يرجى ملء جميع الحقول');
+    }
+}
+
+// ===== LOGOUT =====
+function logout() {
+    showToast('👋 تم تسجيل الخروج بنجاح');
+
+    setTimeout(() => {
+        cart = [];
+        wishlist = [];
+        updateCartBadge();
+        renderCart();
+        showSection('home-section');
+    }, 1000);
+}
+
+// ===== TOAST =====
+function showToast(msg) {
+    const toast = document.getElementById('toast');
+    toast.innerHTML = msg;
+    toast.classList.add('show');
+    setTimeout(() => toast.classList.remove('show'), 3000);
+}
+
+// ===== CLOCK =====
+function updateClock() {
+    const now = new Date();
+    const hours = now.getHours().toString().padStart(2, '0');
+    const minutes = now.getMinutes().toString().padStart(2, '0');
+    document.getElementById('clock').textContent = hours + ':' + minutes;
+}
+setInterval(updateClock, 1000);
+updateClock();
+
+// ===== FAQ =====
+function toggleFaq(el) {
+    el.classList.toggle('open');
+    const answer = el.nextElementSibling;
+    if(answer) answer.classList.toggle('open');
+}
+
+// ===== CONTACT =====
+function sendContact() {
+    const name = document.getElementById('contact-name').value;
+    const email = document.getElementById('contact-email').value;
+    const msg = document.getElementById('contact-msg').value;
+
+    if(name && email && msg) {
+        showToast('✅ تم إرسال الرسالة!');
+        document.getElementById('contact-name').value = '';
+        document.getElementById('contact-email').value = '';
+        document.getElementById('contact-msg').value = '';
+    } else {
+        showToast('⚠️ يرجى ملء جميع الحقول');
+    }
+}
+
+// ===== COUNTDOWN =====
+function startCountdown() {
+    let hours = 23, minutes = 59, seconds = 59;
+
+    const updateCountdown = () => {
+        seconds--;
+        if(seconds < 0) {
+            seconds = 59;
+            minutes--;
+            if(minutes < 0) {
+                minutes = 59;
+                hours--;
+                if(hours < 0) {
+                    hours = 23;
+                }
+            }
+        }
+
+        const hEl = document.getElementById('cd-hours');
+        const mEl = document.getElementById('cd-minutes');
+        const sEl = document.getElementById('cd-seconds');
+        if(hEl) hEl.textContent = hours.toString().padStart(2, '0');
+        if(mEl) mEl.textContent = minutes.toString().padStart(2, '0');
+        if(sEl) sEl.textContent = seconds.toString().padStart(2, '0');
+    };
+
+    setInterval(updateCountdown, 1000);
+    updateCountdown();
+}
+
+// ===== INIT =====
+document.addEventListener('DOMContentLoaded', function() {
+    renderProducts();
+    updateCartBadge();
+
+    const modal = document.getElementById('product-modal');
+    if(modal) {
+        modal.addEventListener('click', function(e) {
+            if(e.target === modal) closeModal();
+        });
+    }
+
+});
+</script>
+
+</body>
+</html>
